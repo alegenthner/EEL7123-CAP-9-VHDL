@@ -5,6 +5,7 @@ use IEEE.Std_Logic_1164.all;
 
 entity register is
   port (
+    registerENA: in std_logic;
     registerRST: in std_logic;
     registerCLK: in std_logic;
     registerIn: in std_logic_vector (15 downto 0);
@@ -19,7 +20,7 @@ architecture behavior of register is
       begin
       wait until registerCLK'event and registerCLK = '1';
 
-      if registerRST = '1' then
+      if registerRST = '1' or registerENA = '0' then
         registerOut <= "0000000000000000";
       else
         registerOut <= registerIn

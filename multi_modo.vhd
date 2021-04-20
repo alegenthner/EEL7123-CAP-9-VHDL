@@ -3,7 +3,7 @@ use IEEE.STD_LOGIC_1164.all;
 
 entity multi_modo is
 	port(
-    mmCLK, mmRST: in std_logic;
+    mmCLK, mmRST, mmENA: in std_logic;
     mmSelect: in std_logic_vector(1 downto 0);
     mmIn: in std_logic_vector(15 downto 0);
     mmOut: out std_logic_vector(15 downto 0)
@@ -50,6 +50,7 @@ architecture Structural of multi_modo is
 
   component register is
     port(
+      registerENA: in std_logic;
       registerRST: in std_logic;
       registerCLK: in std_logic;
       registerIn: in std_logic_vector (15 downto 0);
@@ -79,9 +80,11 @@ architecture Structural of multi_modo is
                             F => mm_registerIn );
     -- create mm_registerIn
     --    ||  mmPreOut
-    U04: register port map( registerRST => mmRST,
+    U04: register port map( registerENA => mmENA,
+                            registerRST => mmRST,
                             registerCLK => mmCLK,
                             registerIn => mm_registerIn,
                             registerOut => mmPreOut);
+
     mmOut <= mmPreOut;
 end Structural;
