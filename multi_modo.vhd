@@ -12,6 +12,10 @@ end multi_modo;
 
 architecture Structural of multi_modo is
 
+  signal mm_muxA, mm_muxB, mm_muxC, mm_muxD : std_logic_vector(15 downto 0);
+  signal mm_registerIn : std_logic_vector(15 downto 0);
+  signal mmPreOut : std_logic_vector(15 downto 0);
+
   component adder_16 is
     port(
       operand_a, operand_b: in std_logic_vector(15 downto 0);
@@ -52,19 +56,32 @@ architecture Structural of multi_modo is
       registerOut: out std_logic_vector (15 downto 0)
     );
   end component;
-	 -- create mm_resgiterIn
+
   begin
-		U00: adder_16 port map();
-    U01: srl port map();
-    U02: sll port map();
+
+    mm_muxB <= mmIn;
+
+		U00: adder_16 port map( operand_a => mmIn ,
+                            operand_b => mmOut ,
+                            result => mm_muxA
+    );
+    U01: srl port map(srlIn => mmPreOut, srlOut => mm_muxC);
+    U02: sll port map(sllIn => mmPreOut, sllOut => mm_muxD);
+    -- create mm_muxA --checked
+    --        mm_muxB --checked
+    --        mm_muxC --checked
+    --        mm_muxD --checked
     U03: mux_4_1 port map(  A => mm_muxA ,
                             B => mm_muxB ,
                             C => mm_muxC ,
                             D => mm_muxD ,
                             s => mmSelect,
                             F => mm_registerIn );
+    -- create mm_registerIn
+    --    ||  mmPreOut
     U04: register port map( registerRST => mmRST,
                             registerCLK => mmCLK,
                             registerIn => mm_registerIn,
-                            registerOut => mmOut);
+                            registerOut => mmPreOut);
+    mmOut <= mmPreOut;
 end Structural;

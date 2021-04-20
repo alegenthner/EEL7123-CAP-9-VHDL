@@ -17,8 +17,8 @@ entity mux_4_1 is
 architecture mux_estr of mux_4_1 is
 
   begin
-    F <= A when s = "00" else
-    B when s = "01" else
-    C when s = "10" else
-    D;
+    F <=  A when s = "00" else
+          B when s = "01" else
+          C when s = "10" else
+          D;
 end mux_estr;
