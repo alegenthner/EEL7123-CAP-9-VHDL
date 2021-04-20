@@ -3,7 +3,7 @@
 library IEEE;
 use IEEE.Std_Logic_1164.all;
 
-entity register is
+entity regis is
   port (
     registerENA: in std_logic;
     registerRST: in std_logic;
@@ -11,19 +11,19 @@ entity register is
     registerIn: in std_logic_vector (15 downto 0);
     registerOut: out std_logic_vector (15 downto 0)
     );
-  end register;
+  end regis;
 
-architecture behavior of register is
+architecture behavior of regis is
 
   begin
     process
       begin
       wait until registerCLK'event and registerCLK = '1';
 
-      if registerRST = '1' or registerENA = '0' then
+      if registerRST = '1' then
         registerOut <= "0000000000000000";
-      else
-        registerOut <= registerIn
+      elsif registerENA = '1' then
+        registerOut <= registerIn;
       end if;
     end process;
 end behavior;

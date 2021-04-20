@@ -23,14 +23,14 @@ architecture Structural of multi_modo is
     );
   end component;
 
-  component sll is
+  component shiftL is
     port(
       sllIn: in std_logic_vector (15 downto 0);
       sllOut: out std_logic_vector (15 downto 0)
     );
   end component;
 
-  component srl is
+  component shiftR is
     port(
       srlIn: in std_logic_vector (15 downto 0);
       srlOut: out std_logic_vector (15 downto 0)
@@ -48,7 +48,7 @@ architecture Structural of multi_modo is
     );
   end component;
 
-  component register is
+  component regis is
     port(
       registerENA: in std_logic;
       registerRST: in std_logic;
@@ -66,8 +66,8 @@ architecture Structural of multi_modo is
                             operand_b => mmPreOut ,
                             result => mm_muxA
     );
-    U01: srl port map(srlIn => mmPreOut, srlOut => mm_muxC);
-    U02: sll port map(sllIn => mmPreOut, sllOut => mm_muxD);
+    U01: shiftR port map(srlIn => mmPreOut, srlOut => mm_muxC);
+    U02: shiftL port map(sllIn => mmPreOut, sllOut => mm_muxD);
     -- create mm_muxA --checked
     --        mm_muxB --checked
     --        mm_muxC --checked
@@ -80,7 +80,7 @@ architecture Structural of multi_modo is
                             F => mm_registerIn );
     -- create mm_registerIn
     --    ||  mmPreOut
-    U04: register port map( registerENA => mmENA,
+    U04: regis port map(    registerENA => mmENA,
                             registerRST => mmRST,
                             registerCLK => mmCLK,
                             registerIn => mm_registerIn,

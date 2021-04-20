@@ -3,18 +3,18 @@
 library IEEE;
 use IEEE.Std_Logic_1164.all;
 
-entity srl is
+entity shiftR is
   port (
     srlIn: in std_logic_vector (15 downto 0);
     srlOut: out std_logic_vector (15 downto 0)
     );
-  end srl;
+  end shiftR;
 
-architecture behavior of srl is
+architecture behavior of shiftR is
 
   signal auxSignal: std_logic_vector(14 downto 0);
 
   begin
-    auxSignal <= srlIn(14 downto 0);
-    srlOut <= auxSignal & '0';
+    auxSignal <= srlIn(15 downto 1);
+    srlOut <= '0' & auxSignal;
 end behavior;

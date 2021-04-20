@@ -1,0 +1,49 @@
+C:/VHDL/EEL7123-CAP-9-VHDL/mux_4_1.vhd {1 {vcom -work work -2002 -explicit -stats=none C:/VHDL/EEL7123-CAP-9-VHDL/mux_4_1.vhd
+Model Technology ModelSim ALTERA vcom 10.3d Compiler 2014.10 Oct  7 2014
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Compiling entity mux_4_1
+-- Compiling architecture mux_estr of mux_4_1
+
+} {} {}} C:/VHDL/EEL7123-CAP-9-VHDL/multi_modo.vhd {1 {vcom -work work -2002 -explicit -stats=none C:/VHDL/EEL7123-CAP-9-VHDL/multi_modo.vhd
+Model Technology ModelSim ALTERA vcom 10.3d Compiler 2014.10 Oct  7 2014
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Compiling entity multi_modo
+-- Compiling architecture Structural of multi_modo
+
+} {} {}} C:/VHDL/EEL7123-CAP-9-VHDL/regis.vhd {1 {vcom -work work -2002 -explicit -stats=none C:/VHDL/EEL7123-CAP-9-VHDL/regis.vhd
+Model Technology ModelSim ALTERA vcom 10.3d Compiler 2014.10 Oct  7 2014
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Compiling entity regis
+-- Compiling architecture behavior of regis
+
+} {} {}} C:/VHDL/EEL7123-CAP-9-VHDL/half_adder.vhd {1 {vcom -work work -2002 -explicit -stats=none C:/VHDL/EEL7123-CAP-9-VHDL/half_adder.vhd
+Model Technology ModelSim ALTERA vcom 10.3d Compiler 2014.10 Oct  7 2014
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Compiling entity half_adder
+-- Compiling architecture Structural of half_adder
+
+} {} {}} C:/VHDL/EEL7123-CAP-9-VHDL/full_adder.vhd {1 {vcom -work work -2002 -explicit -stats=none C:/VHDL/EEL7123-CAP-9-VHDL/full_adder.vhd
+Model Technology ModelSim ALTERA vcom 10.3d Compiler 2014.10 Oct  7 2014
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Compiling entity full_adder
+-- Compiling architecture Structural of full_adder
+
+} {} {}} C:/VHDL/EEL7123-CAP-9-VHDL/adder_16.vhd {1 {vcom -work work -2002 -explicit -stats=none C:/VHDL/EEL7123-CAP-9-VHDL/adder_16.vhd
+Model Technology ModelSim ALTERA vcom 10.3d Compiler 2014.10 Oct  7 2014
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Compiling entity adder_16
+-- Compiling architecture Structural of adder_16
+
+} {} {}}
