@@ -1,0 +1,1116 @@
+
+				<!DOCTYPE html>
+				<html>
+					<head>
+						<meta charset="UTF-8">
+						<link rel="stylesheet" href="pluginAssets/katex/katex.css"><script type="application/javascript" src="pluginAssets/mermaid/mermaid.min.js"></script><script type="application/javascript" src="pluginAssets/mermaid/mermaid_render.js"></script><link rel="stylesheet" href="pluginAssets/highlight.js/atom-one-light.css">
+						<title>Capítulo 9: VHDL</title>
+					</head>
+					<body>
+						<div class="exported-note"><div class="exported-note-title">Capítulo 9: VHDL</div>
+
+<style>
+		/* https://necolas.github.io/normalize.css/ */
+		html{line-height:1.15;-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%}body{margin:0}
+		article,aside,footer,header,nav,section{display:block}h1{font-size:2em;margin:.67em 0}hr{box-sizing:content-box;height:0;overflow:visible}
+		pre{font-family:monospace,monospace;font-size:1em}a{background-color:transparent;-webkit-text-decoration-skip:objects}
+		b,strong{font-weight:bolder}small{font-size:80%}img{border-style:none}
+
+		body {
+			font-size: 15px;
+			color: #32373F;
+			word-wrap: break-word;
+			line-height: 1.6em;
+			background-color: #ffffff;
+			font-family: 'Avenir', 'Arial', sans-serif;
+			padding-bottom: 0px;
+			padding-top: 0px;
+		}
+		strong {
+			color: #000000;
+		}
+		kbd {
+			border: 1px solid rgb(220, 220, 220);
+			box-shadow: inset 0 -1px 0 rgb(220, 220, 220);
+			padding: 2px 4px;
+			border-radius: 3px;
+			background-color: rgb(243, 243, 243);
+		}
+		::-webkit-scrollbar {
+			width: 7px;
+			height: 7px;
+		}
+		::-webkit-scrollbar-corner {
+			background: none;
+		}
+		::-webkit-scrollbar-track {
+			border: none;
+		}
+		::-webkit-scrollbar-thumb {
+			background: rgba(100, 100, 100, 0.3); 
+			border-radius: 5px;
+		}
+		::-webkit-scrollbar-track:hover {
+			background: rgba(0, 0, 0, 0.1); 
+		}
+		::-webkit-scrollbar-thumb:hover {
+			background: rgba(100, 100, 100, 0.7); 
+		}
+
+		/* Remove top padding and margin from first child so that top of rendered text is aligned to top of text editor text */
+
+		#rendered-md > h1:first-child,
+		#rendered-md > h2:first-child,
+		#rendered-md > h3:first-child,
+		#rendered-md > h4:first-child,
+		#rendered-md > ul:first-child,
+		#rendered-md > ol:first-child,
+		#rendered-md > table:first-child,
+		#rendered-md > blockquote:first-child,
+		#rendered-md > img:first-child,
+		#rendered-md > p:first-child {
+			margin-top: 0;
+			padding-top: 0;
+		}
+		
+		p, h1, h2, h3, h4, h5, h6, ul, table {
+			margin-top: .6em;
+			margin-bottom: .65em;
+		}
+		h1, h2, h3, h4, h5, h6 {
+			line-height: 1.5em;
+		}
+		h1 {
+			font-size: 1.5em;
+			font-weight: bold;
+			border-bottom: 1px solid #dddddd;
+			padding-bottom: .3em;
+		}
+		h2 {
+			font-size: 1.3em;
+			font-weight: bold;
+			padding-bottom: .1em; */
+		}
+		h3 {
+			font-size: 1.1em;
+		}
+		h4, h5, h6 {
+			font-size: 1em;
+			font-weight: bold;
+		}
+
+		.exported-note-title {
+			font-size: 2em;
+			font-weight: bold;
+			margin-bottom: 0.8em;
+			line-height: 1.5em;
+			padding-bottom: .35em;
+			border-bottom: 1px solid #dddddd;
+		}
+
+		a {
+			color: #155BDA;
+		}
+		ul, ol {
+			padding-left: 0;
+			margin-left: 1.7em;
+		}
+		li {
+			margin-bottom: .4em;
+		}
+		li p {
+			margin-top: 0.2em;
+			margin-bottom: 0;
+		}
+		.resource-icon {
+			display: inline-block;
+			position: relative;
+			top: .5em;
+			text-decoration: none;
+			width: 1.2em;
+			height: 1.4em;
+			margin-right: 0.4em;
+			background-color:  #155BDA;
+		}
+    /* These icons are obtained from the wonderful ForkAwesome project by copying the src svgs 
+     * into the css classes below.
+     * svgs are obtained from https://github.com/ForkAwesome/Fork-Awesome/tree/master/src/icons/svg
+     * instead of the svg width, height property you must use a viewbox here, 0 0 1536 1792 is typically the actual size of the icon
+     * each line begins with the pre-amble -webkit-mask: url("data:image/svg+xml;utf8,
+     * and of course finishes with ");
+     * to precvent artifacts it is also necessary to include -webkit-mask-repeat: no-repeat;
+     * on the following line
+     * */
+		.fa-joplin {
+			/* Awesome Font file */
+			-webkit-mask: url("data:image/svg+xml;utf8,<svg viewBox='0 0 1536 1792' xmlns='http://www.w3.org/2000/svg'><path d='M373.834 128C168.227 128 0 296.223 0 501.834v788.336C0 1495.778 168.227 1664 373.834 1664h788.336c205.608 0 373.83-168.222 373.83-373.83V501.834C1536 296.224 1367.778 128 1162.17 128zm397.222 205.431h417.424a7.132 7.132 0 0 1 7.132 7.133v132.552c0 4.461-3.619 8.073-8.077 8.073h-57.23c-24.168 0-43.768 19.338-44.284 43.374v2.377h-.017v136.191h-.053l-.466 509.375c-5.02 77.667-39.222 149.056-96.324 201.046-60.28 54.834-141.948 85.017-229.962 85.017-12.45 0-25.208-.61-37.907-1.785-92.157-8.682-181.494-48.601-251.662-112.438-71.99-65.517-117.147-150.03-127.164-238-11.226-98.763 23.42-192.783 95.045-257.937 81.99-74.637 198.185-101.768 316.613-75.704 5.574 1.227 9.55 6.282 9.55 11.997v199.52c-.199 2.625-1.481 6.599-8.183 2.896-.663-.365-1.194-.511-1.653-.531-21.987-10.587-45.159-17.57-68.559-19.916-.38-.04-.757-.124-1.138-.163-.537-.048-1.034-.033-1.556-.075-4.13-.354-8.183-.517-12.203-.58-.87-.011-1.771-.127-2.641-.127-.486 0-.951.05-1.437.057-1.464.011-2.886.115-4.33.163-2.76.102-5.497.211-8.182.448-.273.024-.547.07-.835.097-25.509 2.4-47.864 11.104-65.012 25.47-.954.802-1.974 1.53-2.9 2.36a1.34 1.34 0 0 1-.168.146c-23.96 21.8-34.881 53.872-30.726 90.316 4.62 40.737 26.94 81.156 62.841 113.823 35.908 32.67 80.335 52.977 125.113 57.186 35.118 3.36 66.547-3.919 89.899-20.461a97.255 97.255 0 0 0 9.365-7.501c2.925-2.661 5.569-5.5 8.086-8.416.3-.348.672-.673.975-1.024 8.253-9.864 14.222-21.067 17.996-33.148.639-2.034 1.051-4.148 1.564-6.227.381-1.563.81-3.106 1.112-4.693.555-2.784.923-5.632 1.253-8.49.086-.709.183-1.414.237-2.128.492-4.893.693-9.858.55-14.91h.013V521.623c-2.01-22.626-20.78-40.434-43.928-40.434h-57.23a8.071 8.071 0 0 1-8.077-8.073V340.564a7.132 7.132 0 0 1 7.136-7.133z'/></svg>");
+		}
+		.fa-file-image {
+			-webkit-mask: url("data:image/svg+xml;utf8,<svg viewBox='0 0 1536 1792' xmlns='http://www.w3.org/2000/svg'><path d='M1468 380c37 37 68 111 68 164v1152c0 53-43 96-96 96H96c-53 0-96-43-96-96V96C0 43 43 0 96 0h896c53 0 127 31 164 68zm-444-244v376h376c-6-17-15-34-22-41l-313-313c-7-7-24-16-41-22zm384 1528V640H992c-53 0-96-43-96-96V128H128v1536h1280zm-128-448v320H256v-192l192-192 128 128 384-384zm-832-192c-106 0-192-86-192-192s86-192 192-192 192 86 192 192-86 192-192 192z'/></svg>");
+      -webkit-mask-repeat: no-repeat;
+		}
+		.fa-file-pdf {
+			-webkit-mask: url("data:image/svg+xml;utf8,<svg viewBox='0 0 1536 1792' xmlns='http://www.w3.org/2000/svg'><path d='M1468 380c37 37 68 111 68 164v1152c0 53-43 96-96 96H96c-53 0-96-43-96-96V96C0 43 43 0 96 0h896c53 0 127 31 164 68zm-444-244v376h376c-6-17-15-34-22-41l-313-313c-7-7-24-16-41-22zm384 1528V640H992c-53 0-96-43-96-96V128H128v1536h1280zm-514-593c25 20 53 38 84 56 42-5 81-7 117-7 67 0 152 8 177 49 7 10 13 28 2 52-1 1-2 3-3 4v1c-3 18-18 38-71 38-64 0-161-29-245-73-139 15-285 46-392 83-103 176-182 262-242 262-10 0-19-2-28-7l-24-12c-3-1-4-3-6-5-5-5-9-16-6-36 10-46 64-123 188-188 8-5 18-2 23 6 1 1 2 3 2 4 31-51 67-116 107-197 45-90 80-178 104-262-32-109-42-221-24-287 7-25 22-40 42-40h22c15 0 27 5 35 15 12 14 15 36 9 68-1 3-2 6-4 8 1 3 1 5 1 8v30c-1 63-2 123-14 192 35 105 87 190 146 238zm-576 411c30-14 73-57 137-158-75 58-122 124-137 158zm398-920c-10 28-10 76-2 132 3-16 5-31 7-44 2-17 5-31 7-43 1-3 2-5 4-8-1-1-1-3-2-5-1-18-7-29-13-36 0 2-1 3-1 4zm-124 661c88-35 186-63 284-81-10-8-20-15-29-23-49-43-93-103-127-176-19 61-47 126-83 197-15 28-30 56-45 83zm646-16c-5-5-31-24-140-24 49 18 94 28 124 28 9 0 14 0 18-1 0-1-1-2-2-3z'/></svg>");
+      -webkit-mask-repeat: no-repeat;
+		}
+		.fa-file-word {
+			-webkit-mask: url("data:image/svg+xml;utf8,<svg viewBox='0 0 1536 1792' xmlns='http://www.w3.org/2000/svg'><path d='M1468 380c37 37 68 111 68 164v1152c0 53-43 96-96 96H96c-53 0-96-43-96-96V96C0 43 43 0 96 0h896c53 0 127 31 164 68zm-444-244v376h376c-6-17-15-34-22-41l-313-313c-7-7-24-16-41-22zm384 1528V640H992c-53 0-96-43-96-96V128H128v1536h1280zM233 768v107h70l164 661h159l128-485c5-15 8-30 10-46 1-8 2-16 2-24h4l3 24c3 14 4 30 9 46l128 485h159l164-661h70V768h-300v107h90l-99 438c-4 16-6 33-7 46l-2 21h-4c0-6-2-14-3-21-3-13-5-30-9-46L825 768H711l-144 545c-4 16-5 33-8 46l-4 21h-4l-2-21c-1-13-3-30-7-46l-99-438h90V768H233z'/></svg>");
+      -webkit-mask-repeat: no-repeat;
+		}
+		.fa-file-powerpoint {
+			-webkit-mask: url("data:image/svg+xml;utf8,<svg viewBox='0 0 1536 1792' xmlns='http://www.w3.org/2000/svg'><path d='M1468 380c37 37 68 111 68 164v1152c0 53-43 96-96 96H96c-53 0-96-43-96-96V96C0 43 43 0 96 0h896c53 0 127 31 164 68zm-444-244v376h376c-6-17-15-34-22-41l-313-313c-7-7-24-16-41-22zm384 1528V640H992c-53 0-96-43-96-96V128H128v1536h1280zm-992-234v106h327v-106h-93v-167h137c43 0 82-2 118-15 90-31 146-124 146-233s-54-193-137-228c-38-15-84-19-130-19H416v107h92v555h-92zm353-280H650V882h120c35 0 62 6 83 18 36 21 56 62 56 115 0 56-20 99-62 120-21 10-47 15-78 15z'/></svg>");
+      -webkit-mask-repeat: no-repeat;
+		}
+		.fa-file-excel {
+			-webkit-mask: url("data:image/svg+xml;utf8,<svg viewBox='0 0 1536 1792' xmlns='http://www.w3.org/2000/svg'><path d='M1468 380c37 37 68 111 68 164v1152c0 53-43 96-96 96H96c-53 0-96-43-96-96V96C0 43 43 0 96 0h896c53 0 127 31 164 68zm-444-244v376h376c-6-17-15-34-22-41l-313-313c-7-7-24-16-41-22zm384 1528V640H992c-53 0-96-43-96-96V128H128v1536h1280zm-979-234v106h281v-106h-75l103-161c12-19 18-34 21-34h2c1 4 3 7 5 10 4 8 10 14 17 24l107 161h-76v106h291v-106h-68l-192-273 195-282h67V768H828v107h74l-103 159c-12 19-21 34-21 33h-2c-1-4-3-7-5-10-4-7-9-14-17-23L648 875h76V768H434v107h68l189 272-194 283h-68z'/></svg>");
+      -webkit-mask-repeat: no-repeat;
+		}
+		.fa-file-audio {
+			-webkit-mask: url("data:image/svg+xml;utf8,<svg viewBox='0 0 1536 1792' xmlns='http://www.w3.org/2000/svg'><path d='M1468 380c37 37 68 111 68 164v1152c0 53-43 96-96 96H96c-53 0-96-43-96-96V96C0 43 43 0 96 0h896c53 0 127 31 164 68zm-444-244v376h376c-6-17-15-34-22-41l-313-313c-7-7-24-16-41-22zm384 1528V640H992c-53 0-96-43-96-96V128H128v1536h1280zM620 850c12 5 20 17 20 30v544c0 13-8 25-20 30-4 1-8 2-12 2-8 0-16-3-23-9l-166-167H288c-18 0-32-14-32-32v-192c0-18 14-32 32-32h131l166-167c10-9 23-12 35-7zm417 689c19 0 37-8 50-24 83-102 129-231 129-363s-46-261-129-363c-22-28-63-32-90-10-28 23-32 63-9 91 65 80 100 178 100 282s-35 202-100 282c-23 28-19 68 9 90 12 10 26 15 40 15zm-211-148c17 0 34-7 47-20 56-60 87-137 87-219s-31-159-87-219c-24-26-65-27-91-3-25 24-27 65-2 91 33 36 52 82 52 131s-19 95-52 131c-25 26-23 67 2 91 13 11 29 17 44 17z'/></svg>");
+      -webkit-mask-repeat: no-repeat;
+		}
+		.fa-file-video {
+			-webkit-mask: url("data:image/svg+xml;utf8,<svg viewBox='0 0 1536 1792' xmlns='http://www.w3.org/2000/svg'><path d='M1468 380c37 37 68 111 68 164v1152c0 53-43 96-96 96H96c-53 0-96-43-96-96V96C0 43 43 0 96 0h896c53 0 127 31 164 68zm-444-244v376h376c-6-17-15-34-22-41l-313-313c-7-7-24-16-41-22zm384 1528V640H992c-53 0-96-43-96-96V128H128v1536h1280zM768 768c70 0 128 58 128 128v384c0 70-58 128-128 128H384c-70 0-128-58-128-128V896c0-70 58-128 128-128h384zm492 2c12 5 20 17 20 30v576c0 13-8 25-20 30-4 1-8 2-12 2-8 0-17-3-23-9l-265-266v-90l265-266c6-6 15-9 23-9 4 0 8 1 12 2z'/></svg>");
+      -webkit-mask-repeat: no-repeat;
+		}
+		.fa-file-archive {
+			-webkit-mask: url("data:image/svg+xml;utf8,<svg viewBox='0 0 1536 1792' xmlns='http://www.w3.org/2000/svg'><path d='M640 384V256H512v128h128zm128 128V384H640v128h128zM640 640V512H512v128h128zm128 128V640H640v128h128zm700-388c37 37 68 111 68 164v1152c0 53-43 96-96 96H96c-53 0-96-43-96-96V96C0 43 43 0 96 0h896c53 0 127 31 164 68zm-444-244v376h376c-6-17-15-34-22-41l-313-313c-7-7-24-16-41-22zm384 1528V640H992c-53 0-96-43-96-96V128H768v128H640V128H128v1536h1280zM781 943c85 287 107 349 107 349 5 17 8 34 8 52 0 111-108 192-256 192s-256-81-256-192c0-18 3-35 8-52 0 0 21-62 120-396V768h128v128h79c29 0 54 19 62 47zm-141 465c71 0 128-29 128-64s-57-64-128-64-128 29-128 64 57 64 128 64z'/></svg>");
+      -webkit-mask-repeat: no-repeat;
+		}
+		.fa-file-code {
+			-webkit-mask: url("data:image/svg+xml;utf8,<svg viewBox='0 0 1536 1792' xmlns='http://www.w3.org/2000/svg'><path d='M1468 380c37 37 68 111 68 164v1152c0 53-43 96-96 96H96c-53 0-96-43-96-96V96C0 43 43 0 96 0h896c53 0 127 31 164 68zm-444-244v376h376c-6-17-15-34-22-41l-313-313c-7-7-24-16-41-22zm384 1528V640H992c-53 0-96-43-96-96V128H128v1536h1280zM480 768c11-14 31-17 45-6l51 38c14 11 17 31 6 45l-182 243 182 243c11 14 8 34-6 45l-51 38c-14 11-34 8-45-6l-226-301c-8-11-8-27 0-38zm802 301c8 11 8 27 0 38l-226 301c-11 14-31 17-45 6l-51-38c-14-11-17-31-6-45l182-243-182-243c-11-14-8-34 6-45l51-38c14-11 34-8 45 6zm-620 461c-18-3-29-20-26-37l138-831c3-18 20-29 37-26l63 10c18 3 29 20 26 37l-138 831c-3 18-20 29-37 26z'/></svg>");
+      -webkit-mask-repeat: no-repeat;
+		}
+		.fa-file-alt, .fa-file-csv {
+      /* fork-awesome doesn't have csv so we use the text icon */
+			-webkit-mask: url("data:image/svg+xml;utf8,<svg viewBox='0 0 1536 1792' xmlns='http://www.w3.org/2000/svg'><path d='M1468 380c37 37 68 111 68 164v1152c0 53-43 96-96 96H96c-53 0-96-43-96-96V96C0 43 43 0 96 0h896c53 0 127 31 164 68zm-444-244v376h376c-6-17-15-34-22-41l-313-313c-7-7-24-16-41-22zm384 1528V640H992c-53 0-96-43-96-96V128H128v1536h1280zM384 800c0-18 14-32 32-32h704c18 0 32 14 32 32v64c0 18-14 32-32 32H416c-18 0-32-14-32-32v-64zm736 224c18 0 32 14 32 32v64c0 18-14 32-32 32H416c-18 0-32-14-32-32v-64c0-18 14-32 32-32h704zm0 256c18 0 32 14 32 32v64c0 18-14 32-32 32H416c-18 0-32-14-32-32v-64c0-18 14-32 32-32h704z'/></svg>");
+      -webkit-mask-repeat: no-repeat;
+		}
+		.fa-file {
+			-webkit-mask: url("data:image/svg+xml;utf8,<svg viewBox='0 0 1536 1792' xmlns='http://www.w3.org/2000/svg'><path d='M1468 380c37 37 68 111 68 164v1152c0 53-43 96-96 96H96c-53 0-96-43-96-96V96C0 43 43 0 96 0h896c53 0 127 31 164 68zm-444-244v376h376c-6-17-15-34-22-41l-313-313c-7-7-24-16-41-22zm384 1528V640H992c-53 0-96-43-96-96V128H128v1536h1280z'/></svg>");
+      -webkit-mask-repeat: no-repeat;
+		}
+		blockquote {
+			border-left: 4px solid rgb(220, 220, 220);
+			padding-left: 1.2em;
+			margin-left: 0;
+			opacity: .7;
+		}
+
+		.jop-tinymce table,
+		table {
+			text-align: left;
+			border-collapse: collapse;
+			border: 1px solid rgb(220, 220, 220);
+			background-color: #ffffff;
+		}
+
+		.jop-tinymce table td, .jop-tinymce table th,
+		table td, th {
+			text-align: left;
+			padding: .5em 1em .5em 1em;
+			font-size: 15;
+			color: #32373F;
+			font-family: 'Avenir', 'Arial', sans-serif;
+		}
+
+		.jop-tinymce table td,
+		table td {
+			border: 1px solid rgb(220, 220, 220);
+		}
+
+		.jop-tinymce table th,
+		table th {
+			border: 1px solid rgb(220, 220, 220);
+			border-bottom: 2px solid rgb(220, 220, 220);
+			background-color: rgb(247, 247, 247);
+		}
+
+		.jop-tinymce table tr:nth-child(even),
+		table tr:nth-child(even) {
+			background-color: rgb(247, 247, 247);
+		}
+
+		.jop-tinymce table tr:hover,
+		table tr:hover {
+			background-color: #e5e5e5;
+		}
+
+		hr {
+			border: none;
+			border-bottom: 2px solid #dddddd;
+		}
+		img {
+			max-width: 100%;
+			height: auto;
+		}
+		
+		.inline-code,
+		.mce-content-body code {
+			border: 1px solid rgb(220, 220, 220);
+			background-color: rgb(243, 243, 243);
+			padding-right: .2em;
+			padding-left: .2em;
+			border-radius: .25em;
+			color: rgb(0,0,0);
+			font-size: .9em;
+		}
+
+		.highlighted-keyword {
+			background-color: #F3B717;
+			color: black;
+		}
+
+		.not-loaded-resource img {
+			width: 1.15em;
+			height: 1.15em;
+			background: white;
+			padding: 2px !important;
+			border-radius: 2px;
+			box-shadow: 0 1px 3px #000000aa;
+		}
+
+		a.not-loaded-resource img {
+			margin-right: .2em;
+		}
+
+		a.not-loaded-resource {
+			display: flex;
+			flex-direction: row;
+			align-items: center;
+		}
+
+		.md-checkbox input[type=checkbox]:checked {
+			opacity: 0.7;
+		}
+
+		.jop-tinymce ul.joplin-checklist .checked,
+		.md-checkbox .checkbox-label-checked {
+			opacity: 0.5;
+		}
+
+		.exported-note {
+			padding: 1em;
+		}
+
+		.joplin-editable .joplin-source {
+			display: none;
+		}
+
+		/* =============================================== */
+		/* For TinyMCE */
+		/* =============================================== */
+
+		.mce-content-body {
+			/* Note: we give a bit more padding at the bottom, to allow scrolling past the end of the document */
+			padding: 5px 10px 10em 0;
+		}
+
+		/*
+		.mce-content-body code {
+			background-color: transparent;
+		}
+		*/
+
+		.mce-content-body [data-mce-selected=inline-boundary] {
+			background-color: transparent;
+		}
+
+		.mce-content-body .joplin-editable {
+			cursor: pointer !important;
+		}
+
+		.mce-content-body.mce-content-readonly {
+			opacity: 0.5;
+		}
+
+		/* We need that to make sure click events have the A has a target */
+		.katex a span {
+			pointer-events: none;
+		}
+
+		.media-player {
+			width: 100%;
+			margin-top: 10px;
+		}
+
+		.media-player.media-pdf {
+			min-height: 100vh;
+		}
+
+		/* Clear the CODE style if the element is within a joplin-editable block */
+		.mce-content-body .joplin-editable code {
+			border: none;
+			background: none;
+			padding: 0;
+			color: inherit;
+			font-size: inherit;
+		}
+
+		/* =============================================== */
+		/* For TinyMCE */
+		/* =============================================== */
+
+		@media print {
+			body {
+				height: auto !important;
+			}
+
+			pre {
+				white-space: pre-wrap;
+			}
+
+			.code, .inline-code {
+				border: 1px solid #CBCBCB;
+			}
+
+			#joplin-container-content {
+				/* The height of the content is set dynamically by JavaScript (in updateBodyHeight) to go
+				   around various issues related to scrolling. However when printing we don't want this
+				   fixed size as that would crop the content. So we set it to auto here. "important" is
+				   needed to override the style set by JavaScript at the element-level. */
+				height: auto !important;
+			}
+		}
+	
+
+				/*
+					FOR THE MARKDOWN EDITOR
+				*/
+
+				/* Remove the indentation from the checkboxes at the root of the document
+				   (otherwise they are too far right), but keep it for their children to allow
+				   nested lists. Make sure this value matches the UL margin. */
+
+				li.md-checkbox {
+					list-style-type: none;
+				}
+
+				li.md-checkbox input[type=checkbox] {
+					margin-left: -1.71em;
+					margin-right: 0.7em;
+				}
+				
+				ul.joplin-checklist {
+					list-style:none;
+				}
+
+				/*
+					FOR THE RICH TEXT EDITOR
+				*/
+
+				ul.joplin-checklist li::before {
+					content:"\f14a";
+					font-family:"Font Awesome 5 Free";
+					background-size: 16px 16px;
+					pointer-events: all;
+					cursor: pointer;
+					width: 1em;
+					height: 1em;
+					margin-left: -1.3em;
+					position: absolute;
+					color: #32373F;
+				}
+
+				.joplin-checklist li:not(.checked)::before {
+					content:"\f0c8";
+				}
+.mermaid { background-color: white; width: 640px; }</style><div id="rendered-md"><h1 id="relatório-capítulo-9-vhdl">Relatório capítulo 9: VHDL</h1>
+<p><strong>Aluno</strong>: Alexandre Hoffmann Genthner<br>
+<strong>Matrícula:</strong> 16103372</p>
+<hr>
+<ul>
+<li>Diagrama de estados do circuito:</li>
+</ul>
+<center class="jop-noMdConv">
+<p><img src="_resources/19947e255f0c4683a78f2dac5127127c.png" alt="diagram.png"></p>
+</center>
+<ul>
+<li>Resultado final da simulação do arquivo <code class="inline-code">multi_modo.vhd</code>, passando por 6 estados tendo como valor de teste <code class="inline-code">mmIn = 42</code>:</li>
+</ul>
+<p><img src="_resources/5c08e7afa0f4402891f47f4bbb0a47e4.png" alt="waves.png"></p>
+<h2 id="simulação-na-plataforma-online">Simulação na plataforma <em>online</em></h2>
+<p>Para o valor de 42 na entrada, deve-se esperar os seguintes valores na emulação:</p>
+<center class="jop-noMdConv">
+<table>
+<thead>
+<tr>
+<th style="text-align:right">operação</th>
+<th style="text-align:center">SW(17 <em>downto</em> 16)</th>
+<th style="text-align:center"><strong>Decimal</strong></th>
+<th style="text-align:center"><strong>Hexadecimal</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:right">-</td>
+<td style="text-align:center"><code class="inline-code">01</code></td>
+<td style="text-align:center">42</td>
+<td style="text-align:center"><code class="inline-code">0x2A</code></td>
+</tr>
+<tr>
+<td style="text-align:right"><span class="joplin-editable"><span class="joplin-source" data-joplin-language="katex" data-joplin-source-open="$" data-joplin-source-close="$">R_2\leftarrow R_1 \ll 1</span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>R</mi><mn>2</mn></msub><mo>←</mo><msub><mi>R</mi><mn>1</mn></msub><mo>≪</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">R_2\leftarrow R_1 \ll 1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.00773em;">R</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.00773em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">←</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.00773em;">R</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.00773em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">≪</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span></span></span></span></span></td>
+<td style="text-align:center"><code class="inline-code">11</code></td>
+<td style="text-align:center">84</td>
+<td style="text-align:center"><code class="inline-code">0x54</code></td>
+</tr>
+<tr>
+<td style="text-align:right"><span class="joplin-editable"><span class="joplin-source" data-joplin-language="katex" data-joplin-source-open="$" data-joplin-source-close="$">R_3 \leftarrow R_2 + R_1</span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>R</mi><mn>3</mn></msub><mo>←</mo><msub><mi>R</mi><mn>2</mn></msub><mo>+</mo><msub><mi>R</mi><mn>1</mn></msub></mrow><annotation encoding="application/x-tex">R_3 \leftarrow R_2 + R_1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.00773em;">R</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.00773em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">3</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">←</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.00773em;">R</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.00773em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.00773em;">R</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.00773em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span></td>
+<td style="text-align:center"><code class="inline-code">00</code></td>
+<td style="text-align:center">126</td>
+<td style="text-align:center"><code class="inline-code">0x7E</code></td>
+</tr>
+<tr>
+<td style="text-align:right"><span class="joplin-editable"><span class="joplin-source" data-joplin-language="katex" data-joplin-source-open="$" data-joplin-source-close="$">R_6\leftarrow R_3 \ll 1</span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>R</mi><mn>6</mn></msub><mo>←</mo><msub><mi>R</mi><mn>3</mn></msub><mo>≪</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">R_6\leftarrow R_3 \ll 1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.00773em;">R</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.00773em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">6</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">←</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.00773em;">R</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.00773em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">3</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">≪</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span></span></span></span></span></td>
+<td style="text-align:center"><code class="inline-code">11</code></td>
+<td style="text-align:center">252</td>
+<td style="text-align:center"><code class="inline-code">0xFC</code></td>
+</tr>
+<tr>
+<td style="text-align:right"><span class="joplin-editable"><span class="joplin-source" data-joplin-language="katex" data-joplin-source-open="$" data-joplin-source-close="$">R_12\leftarrow R_6 \ll 1</span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>R</mi><mn>1</mn></msub><mn>2</mn><mo>←</mo><msub><mi>R</mi><mn>6</mn></msub><mo>≪</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">R_12\leftarrow R_6 \ll 1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.00773em;">R</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.00773em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord">2</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">←</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.00773em;">R</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.00773em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">6</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">≪</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span></span></span></span></span></td>
+<td style="text-align:center"><code class="inline-code">11</code></td>
+<td style="text-align:center">504</td>
+<td style="text-align:center"><code class="inline-code">0x1F8</code></td>
+</tr>
+<tr>
+<td style="text-align:right"><span class="joplin-editable"><span class="joplin-source" data-joplin-language="katex" data-joplin-source-open="$" data-joplin-source-close="$">R_{13} \leftarrow R_{12} + R_1</span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>R</mi><mn>13</mn></msub><mo>←</mo><msub><mi>R</mi><mn>12</mn></msub><mo>+</mo><msub><mi>R</mi><mn>1</mn></msub></mrow><annotation encoding="application/x-tex">R_{13} \leftarrow R_{12} + R_1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.00773em;">R</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.00773em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">1</span><span class="mord mtight">3</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">←</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.00773em;">R</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.00773em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">1</span><span class="mord mtight">2</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.00773em;">R</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.00773em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span></td>
+<td style="text-align:center"><code class="inline-code">00</code></td>
+<td style="text-align:center">546</td>
+<td style="text-align:center"><code class="inline-code">0x222</code></td>
+</tr>
+</tbody>
+</table>
+</center>
+<p><img src="_resources/db436d58f2c049bca30b83f3471030b2.png" alt="Imagem1.png"></p>
+<blockquote>
+<p>valor inicial apresentado pela placa antes da seleção de <code class="inline-code">KEY1</code></p>
+</blockquote>
+<p><img src="_resources/99c901827bdb48c9a615683de20aecad.png" alt="Imagem2.png"></p>
+<blockquote>
+<p>saída <code class="inline-code">0x2A</code> após execução de um ciclo de <em>clock</em> pela chave <code class="inline-code">KEY1</code>. Resultado como previsto.</p>
+</blockquote>
+<p><img src="_resources/ef8593225b1a46c4b173d671d560a90e.png" alt="Imagem3.png"></p>
+<blockquote>
+<p>saída <code class="inline-code">0x54</code> após execução de um ciclo de <em>clock</em> pela chave <code class="inline-code">KEY1</code>. Resultado como previsto.</p>
+</blockquote>
+<p><img src="_resources/3726b727cdf3448db6eacf532779cce6.png" alt="Imagem4.png"></p>
+<blockquote>
+<p>saída <code class="inline-code">0x7E</code> após execução de um ciclo de <em>clock</em> pela chave <code class="inline-code">KEY1</code>. Resultado como previsto.</p>
+</blockquote>
+<p><img src="_resources/0feb88b145494df7b45662743e4b229d.png" alt="Imagem5.png"></p>
+<blockquote>
+<p>saída <code class="inline-code">0xFC</code> após execução de um ciclo de <em>clock</em> pela chave <code class="inline-code">KEY1</code>. Resultado como previsto.</p>
+</blockquote>
+<p><img src="_resources/8e9db155145c4795861edd17ebfd55c3.png" alt="Imagem6.png"></p>
+<blockquote>
+<p>saída <code class="inline-code">0x1F8</code> após execução de um ciclo de <em>clock</em> pela chave <code class="inline-code">KEY1</code>. Resultado como previsto.</p>
+</blockquote>
+<p><img src="_resources/76969d2264ba4e098b3c8e1d8d7dce40.png" alt="Imagem7.png"></p>
+<blockquote>
+<p>saída <code class="inline-code">0x222</code> após execução de um ciclo de <em>clock</em> pela chave <code class="inline-code">KEY1</code>. Resultado como previsto.</p>
+</blockquote>
+<h1 id="arquivos-vhdl">Arquivos VHDL</h1>
+<h2 id="usertopvhd">usertop.vhd</h2>
+<div class="joplin-editable"><pre class="joplin-source" data-joplin-language="vhdl" data-joplin-source-open="```vhdl&#10;" data-joplin-source-close="&#10;```">library IEEE;
+use IEEE.STD_LOGIC_1164.all;
+
+entity usertop is
+
+    port(
+        CLOCK_50: in STD_LOGIC;
+        CLK_500Hz: in STD_LOGIC;
+        RKEY: in STD_LOGIC_VECTOR(3 downto 0);
+        KEY: in STD_LOGIC_VECTOR(3 downto 0);
+        RSW: in STD_LOGIC_VECTOR(17 downto 0);
+        SW    : in STD_LOGIC_VECTOR(17 downto 0);
+        LEDR : out STD_LOGIC_VECTOR(17 downto 0);
+        HEX0,HEX1,HEX2,HEX3,HEX4,HEX5,HEX6,HEX7: out std_logic_vector(6 downto 0)
+     );
+end usertop;
+
+architecture Structural of usertop is
+
+  signal controlCLK, controlRST, controlENA : std_logic;
+  signal resultOut : std_logic_vector(15 downto 0);
+
+  component multi_modo is
+        port(
+      mmCLK, mmRST, mmENA: in std_logic;
+      mmSelect: in std_logic_vector(1 downto 0);
+      mmIn: in std_logic_vector(15 downto 0);
+      mmOut: out std_logic_vector(15 downto 0)
+        );
+  end component;
+
+    component decod7seg is
+        port(
+            c : in  std_logic_vector(3 downto 0);
+            f : out std_logic_vector(6 downto 0)
+        );
+    end component;
+
+  begin
+
+    controlCLK &lt;= not(KEY(1));
+    controlRST &lt;= not(KEY(0));
+    controlENA &lt;= KEY(2);
+
+        U0: multi_modo port map(  controlCLK,           -- clock
+                              controlRST,           -- reset
+                              controlENA,      -- enable/ always enabled
+                              SW(17 downto 16), -- select
+                              SW(15 downto 0),  -- input value
+                              resultOut         -- output value
+        );
+
+        LEDR &lt;= &quot;00&quot; &amp; resultOut;
+
+        U1: decod7seg port map(	c =&gt; resultOut(3 downto 0),
+                                                        f =&gt; HEX0
+        );
+
+        U2: decod7seg port map(	c =&gt; resultOut(7 downto 4),
+                                                        f =&gt; HEX1
+        );
+
+        U3: decod7seg port map(	c =&gt; resultOut(11 downto 8),
+                                                        f =&gt; HEX2
+        );
+
+        U4: decod7seg port map(	c =&gt; resultOut(15 downto 12),
+                                                        f =&gt; HEX3
+        );
+end Structural;
+</pre><pre class="hljs"><code><span class="hljs-keyword">library</span> IEEE;
+<span class="hljs-keyword">use</span> IEEE.STD_LOGIC_1164.<span class="hljs-keyword">all</span>;
+
+<span class="hljs-keyword">entity</span> usertop <span class="hljs-keyword">is</span>
+
+    <span class="hljs-keyword">port</span>(
+        CLOCK_50: <span class="hljs-keyword">in</span> <span class="hljs-built_in">STD_LOGIC</span>;
+        CLK_500Hz: <span class="hljs-keyword">in</span> <span class="hljs-built_in">STD_LOGIC</span>;
+        RKEY: <span class="hljs-keyword">in</span> <span class="hljs-built_in">STD_LOGIC_VECTOR</span>(<span class="hljs-number">3</span> <span class="hljs-keyword">downto</span> <span class="hljs-number">0</span>);
+        KEY: <span class="hljs-keyword">in</span> <span class="hljs-built_in">STD_LOGIC_VECTOR</span>(<span class="hljs-number">3</span> <span class="hljs-keyword">downto</span> <span class="hljs-number">0</span>);
+        RSW: <span class="hljs-keyword">in</span> <span class="hljs-built_in">STD_LOGIC_VECTOR</span>(<span class="hljs-number">17</span> <span class="hljs-keyword">downto</span> <span class="hljs-number">0</span>);
+        SW    : <span class="hljs-keyword">in</span> <span class="hljs-built_in">STD_LOGIC_VECTOR</span>(<span class="hljs-number">17</span> <span class="hljs-keyword">downto</span> <span class="hljs-number">0</span>);
+        LEDR : <span class="hljs-keyword">out</span> <span class="hljs-built_in">STD_LOGIC_VECTOR</span>(<span class="hljs-number">17</span> <span class="hljs-keyword">downto</span> <span class="hljs-number">0</span>);
+        HEX0,HEX1,HEX2,HEX3,HEX4,HEX5,HEX6,HEX7: <span class="hljs-keyword">out</span> <span class="hljs-built_in">std_logic_vector</span>(<span class="hljs-number">6</span> <span class="hljs-keyword">downto</span> <span class="hljs-number">0</span>)
+     );
+<span class="hljs-keyword">end</span> usertop;
+
+<span class="hljs-keyword">architecture</span> Structural <span class="hljs-keyword">of</span> usertop <span class="hljs-keyword">is</span>
+
+  <span class="hljs-keyword">signal</span> controlCLK, controlRST, controlENA : <span class="hljs-built_in">std_logic</span>;
+  <span class="hljs-keyword">signal</span> resultOut : <span class="hljs-built_in">std_logic_vector</span>(<span class="hljs-number">15</span> <span class="hljs-keyword">downto</span> <span class="hljs-number">0</span>);
+
+  <span class="hljs-keyword">component</span> multi_modo <span class="hljs-keyword">is</span>
+        <span class="hljs-keyword">port</span>(
+      mmCLK, mmRST, mmENA: <span class="hljs-keyword">in</span> <span class="hljs-built_in">std_logic</span>;
+      mmSelect: <span class="hljs-keyword">in</span> <span class="hljs-built_in">std_logic_vector</span>(<span class="hljs-number">1</span> <span class="hljs-keyword">downto</span> <span class="hljs-number">0</span>);
+      mmIn: <span class="hljs-keyword">in</span> <span class="hljs-built_in">std_logic_vector</span>(<span class="hljs-number">15</span> <span class="hljs-keyword">downto</span> <span class="hljs-number">0</span>);
+      mmOut: <span class="hljs-keyword">out</span> <span class="hljs-built_in">std_logic_vector</span>(<span class="hljs-number">15</span> <span class="hljs-keyword">downto</span> <span class="hljs-number">0</span>)
+        );
+  <span class="hljs-keyword">end</span> <span class="hljs-keyword">component</span>;
+
+    <span class="hljs-keyword">component</span> decod7seg <span class="hljs-keyword">is</span>
+        <span class="hljs-keyword">port</span>(
+            c : <span class="hljs-keyword">in</span>  <span class="hljs-built_in">std_logic_vector</span>(<span class="hljs-number">3</span> <span class="hljs-keyword">downto</span> <span class="hljs-number">0</span>);
+            f : <span class="hljs-keyword">out</span> <span class="hljs-built_in">std_logic_vector</span>(<span class="hljs-number">6</span> <span class="hljs-keyword">downto</span> <span class="hljs-number">0</span>)
+        );
+    <span class="hljs-keyword">end</span> <span class="hljs-keyword">component</span>;
+
+  <span class="hljs-keyword">begin</span>
+
+    controlCLK &lt;= <span class="hljs-keyword">not</span>(KEY(<span class="hljs-number">1</span>));
+    controlRST &lt;= <span class="hljs-keyword">not</span>(KEY(<span class="hljs-number">0</span>));
+    controlENA &lt;= KEY(<span class="hljs-number">2</span>);
+
+        U0: multi_modo <span class="hljs-keyword">port</span> <span class="hljs-keyword">map</span>(  controlCLK,           <span class="hljs-comment">-- clock</span>
+                              controlRST,           <span class="hljs-comment">-- reset</span>
+                              controlENA,      <span class="hljs-comment">-- enable/ always enabled</span>
+                              SW(<span class="hljs-number">17</span> <span class="hljs-keyword">downto</span> <span class="hljs-number">16</span>), <span class="hljs-comment">-- select</span>
+                              SW(<span class="hljs-number">15</span> <span class="hljs-keyword">downto</span> <span class="hljs-number">0</span>),  <span class="hljs-comment">-- input value</span>
+                              resultOut         <span class="hljs-comment">-- output value</span>
+        );
+
+        LEDR &lt;= <span class="hljs-string">&quot;00&quot;</span> &amp; resultOut;
+
+        U1: decod7seg <span class="hljs-keyword">port</span> <span class="hljs-keyword">map</span>(	c =&gt; resultOut(<span class="hljs-number">3</span> <span class="hljs-keyword">downto</span> <span class="hljs-number">0</span>),
+                                                        f =&gt; HEX0
+        );
+
+        U2: decod7seg <span class="hljs-keyword">port</span> <span class="hljs-keyword">map</span>(	c =&gt; resultOut(<span class="hljs-number">7</span> <span class="hljs-keyword">downto</span> <span class="hljs-number">4</span>),
+                                                        f =&gt; HEX1
+        );
+
+        U3: decod7seg <span class="hljs-keyword">port</span> <span class="hljs-keyword">map</span>(	c =&gt; resultOut(<span class="hljs-number">11</span> <span class="hljs-keyword">downto</span> <span class="hljs-number">8</span>),
+                                                        f =&gt; HEX2
+        );
+
+        U4: decod7seg <span class="hljs-keyword">port</span> <span class="hljs-keyword">map</span>(	c =&gt; resultOut(<span class="hljs-number">15</span> <span class="hljs-keyword">downto</span> <span class="hljs-number">12</span>),
+                                                        f =&gt; HEX3
+        );
+<span class="hljs-keyword">end</span> Structural;
+</code></pre></div>
+<h2 id="multi_modovhd">multi_modo.vhd</h2>
+<div class="joplin-editable"><pre class="joplin-source" data-joplin-language="vhdl" data-joplin-source-open="```vhdl&#10;" data-joplin-source-close="&#10;```">library IEEE;
+use IEEE.STD_LOGIC_1164.all;
+
+entity multi_modo is
+    port(
+    mmCLK, mmRST, mmENA: in std_logic;
+    mmSelect: in std_logic_vector(1 downto 0);
+    mmIn: in std_logic_vector(15 downto 0);
+    mmOut: out std_logic_vector(15 downto 0)
+     );
+end multi_modo;
+
+architecture Structural of multi_modo is
+
+  signal mm_muxA, mm_muxB, mm_muxC, mm_muxD : std_logic_vector(15 downto 0);
+  signal mm_registerIn : std_logic_vector(15 downto 0);
+  signal mmPreOut : std_logic_vector(15 downto 0);
+
+  component adder_16 is
+    port(
+      operand_a, operand_b: in std_logic_vector(15 downto 0);
+      result: out std_logic_vector(15 downto 0)
+    );
+  end component;
+
+  component shiftL is
+    port(
+      sllIn: in std_logic_vector (15 downto 0);
+      sllOut: out std_logic_vector (15 downto 0)
+    );
+  end component;
+
+  component shiftR is
+    port(
+      srlIn: in std_logic_vector (15 downto 0);
+      srlOut: out std_logic_vector (15 downto 0)
+    );
+  end component;
+
+  component mux_4_1 is
+    port(
+      A: in std_logic_vector (15 downto 0);
+      B: in std_logic_vector (15 downto 0);
+      C: in std_logic_vector (15 downto 0);
+      D: in std_logic_vector (15 downto 0);
+      s: in std_logic_vector(1 downto 0);
+      F: out std_logic_vector (15 downto 0)
+    );
+  end component;
+
+  component regis is
+    port(
+      registerENA: in std_logic;
+      registerRST: in std_logic;
+      registerCLK: in std_logic;
+      registerIn: in std_logic_vector (15 downto 0);
+      registerOut: out std_logic_vector (15 downto 0)
+    );
+  end component;
+
+  begin
+
+    mm_muxB &lt;= mmIn;
+
+        U00: adder_16 port map( operand_a =&gt; mmIn ,
+                            	operand_b =&gt; mmPreOut ,
+                            	result =&gt; mm_muxA);
+    	U01: shiftR port map(srlIn =&gt; mmPreOut, srlOut =&gt; mm_muxC);
+    	U02: shiftL port map(sllIn =&gt; mmPreOut, sllOut =&gt; mm_muxD);
+    	U03: mux_4_1 port map(  A =&gt; mm_muxA ,
+                            	B =&gt; mm_muxB ,
+                            	C =&gt; mm_muxC ,
+                            	D =&gt; mm_muxD ,
+                            	s =&gt; mmSelect,
+                            	F =&gt; mm_registerIn );
+    	U04: regis port map(    registerENA =&gt; mmENA,
+                            	registerRST =&gt; mmRST,
+                            	registerCLK =&gt; mmCLK,
+                            	registerIn =&gt; mm_registerIn,
+                            	registerOut =&gt; mmPreOut);
+
+    mmOut &lt;= mmPreOut;
+end Structural;</pre><pre class="hljs"><code><span class="hljs-keyword">library</span> IEEE;
+<span class="hljs-keyword">use</span> IEEE.STD_LOGIC_1164.<span class="hljs-keyword">all</span>;
+
+<span class="hljs-keyword">entity</span> multi_modo <span class="hljs-keyword">is</span>
+    <span class="hljs-keyword">port</span>(
+    mmCLK, mmRST, mmENA: <span class="hljs-keyword">in</span> <span class="hljs-built_in">std_logic</span>;
+    mmSelect: <span class="hljs-keyword">in</span> <span class="hljs-built_in">std_logic_vector</span>(<span class="hljs-number">1</span> <span class="hljs-keyword">downto</span> <span class="hljs-number">0</span>);
+    mmIn: <span class="hljs-keyword">in</span> <span class="hljs-built_in">std_logic_vector</span>(<span class="hljs-number">15</span> <span class="hljs-keyword">downto</span> <span class="hljs-number">0</span>);
+    mmOut: <span class="hljs-keyword">out</span> <span class="hljs-built_in">std_logic_vector</span>(<span class="hljs-number">15</span> <span class="hljs-keyword">downto</span> <span class="hljs-number">0</span>)
+     );
+<span class="hljs-keyword">end</span> multi_modo;
+
+<span class="hljs-keyword">architecture</span> Structural <span class="hljs-keyword">of</span> multi_modo <span class="hljs-keyword">is</span>
+
+  <span class="hljs-keyword">signal</span> mm_muxA, mm_muxB, mm_muxC, mm_muxD : <span class="hljs-built_in">std_logic_vector</span>(<span class="hljs-number">15</span> <span class="hljs-keyword">downto</span> <span class="hljs-number">0</span>);
+  <span class="hljs-keyword">signal</span> mm_registerIn : <span class="hljs-built_in">std_logic_vector</span>(<span class="hljs-number">15</span> <span class="hljs-keyword">downto</span> <span class="hljs-number">0</span>);
+  <span class="hljs-keyword">signal</span> mmPreOut : <span class="hljs-built_in">std_logic_vector</span>(<span class="hljs-number">15</span> <span class="hljs-keyword">downto</span> <span class="hljs-number">0</span>);
+
+  <span class="hljs-keyword">component</span> adder_16 <span class="hljs-keyword">is</span>
+    <span class="hljs-keyword">port</span>(
+      operand_a, operand_b: <span class="hljs-keyword">in</span> <span class="hljs-built_in">std_logic_vector</span>(<span class="hljs-number">15</span> <span class="hljs-keyword">downto</span> <span class="hljs-number">0</span>);
+      result: <span class="hljs-keyword">out</span> <span class="hljs-built_in">std_logic_vector</span>(<span class="hljs-number">15</span> <span class="hljs-keyword">downto</span> <span class="hljs-number">0</span>)
+    );
+  <span class="hljs-keyword">end</span> <span class="hljs-keyword">component</span>;
+
+  <span class="hljs-keyword">component</span> shiftL <span class="hljs-keyword">is</span>
+    <span class="hljs-keyword">port</span>(
+      sllIn: <span class="hljs-keyword">in</span> <span class="hljs-built_in">std_logic_vector</span> (<span class="hljs-number">15</span> <span class="hljs-keyword">downto</span> <span class="hljs-number">0</span>);
+      sllOut: <span class="hljs-keyword">out</span> <span class="hljs-built_in">std_logic_vector</span> (<span class="hljs-number">15</span> <span class="hljs-keyword">downto</span> <span class="hljs-number">0</span>)
+    );
+  <span class="hljs-keyword">end</span> <span class="hljs-keyword">component</span>;
+
+  <span class="hljs-keyword">component</span> shiftR <span class="hljs-keyword">is</span>
+    <span class="hljs-keyword">port</span>(
+      srlIn: <span class="hljs-keyword">in</span> <span class="hljs-built_in">std_logic_vector</span> (<span class="hljs-number">15</span> <span class="hljs-keyword">downto</span> <span class="hljs-number">0</span>);
+      srlOut: <span class="hljs-keyword">out</span> <span class="hljs-built_in">std_logic_vector</span> (<span class="hljs-number">15</span> <span class="hljs-keyword">downto</span> <span class="hljs-number">0</span>)
+    );
+  <span class="hljs-keyword">end</span> <span class="hljs-keyword">component</span>;
+
+  <span class="hljs-keyword">component</span> mux_4_1 <span class="hljs-keyword">is</span>
+    <span class="hljs-keyword">port</span>(
+      A: <span class="hljs-keyword">in</span> <span class="hljs-built_in">std_logic_vector</span> (<span class="hljs-number">15</span> <span class="hljs-keyword">downto</span> <span class="hljs-number">0</span>);
+      B: <span class="hljs-keyword">in</span> <span class="hljs-built_in">std_logic_vector</span> (<span class="hljs-number">15</span> <span class="hljs-keyword">downto</span> <span class="hljs-number">0</span>);
+      C: <span class="hljs-keyword">in</span> <span class="hljs-built_in">std_logic_vector</span> (<span class="hljs-number">15</span> <span class="hljs-keyword">downto</span> <span class="hljs-number">0</span>);
+      D: <span class="hljs-keyword">in</span> <span class="hljs-built_in">std_logic_vector</span> (<span class="hljs-number">15</span> <span class="hljs-keyword">downto</span> <span class="hljs-number">0</span>);
+      s: <span class="hljs-keyword">in</span> <span class="hljs-built_in">std_logic_vector</span>(<span class="hljs-number">1</span> <span class="hljs-keyword">downto</span> <span class="hljs-number">0</span>);
+      F: <span class="hljs-keyword">out</span> <span class="hljs-built_in">std_logic_vector</span> (<span class="hljs-number">15</span> <span class="hljs-keyword">downto</span> <span class="hljs-number">0</span>)
+    );
+  <span class="hljs-keyword">end</span> <span class="hljs-keyword">component</span>;
+
+  <span class="hljs-keyword">component</span> regis <span class="hljs-keyword">is</span>
+    <span class="hljs-keyword">port</span>(
+      registerENA: <span class="hljs-keyword">in</span> <span class="hljs-built_in">std_logic</span>;
+      registerRST: <span class="hljs-keyword">in</span> <span class="hljs-built_in">std_logic</span>;
+      registerCLK: <span class="hljs-keyword">in</span> <span class="hljs-built_in">std_logic</span>;
+      registerIn: <span class="hljs-keyword">in</span> <span class="hljs-built_in">std_logic_vector</span> (<span class="hljs-number">15</span> <span class="hljs-keyword">downto</span> <span class="hljs-number">0</span>);
+      registerOut: <span class="hljs-keyword">out</span> <span class="hljs-built_in">std_logic_vector</span> (<span class="hljs-number">15</span> <span class="hljs-keyword">downto</span> <span class="hljs-number">0</span>)
+    );
+  <span class="hljs-keyword">end</span> <span class="hljs-keyword">component</span>;
+
+  <span class="hljs-keyword">begin</span>
+
+    mm_muxB &lt;= mmIn;
+
+        U00: adder_16 <span class="hljs-keyword">port</span> <span class="hljs-keyword">map</span>( operand_a =&gt; mmIn ,
+                            	operand_b =&gt; mmPreOut ,
+                            	result =&gt; mm_muxA);
+    	U01: shiftR <span class="hljs-keyword">port</span> <span class="hljs-keyword">map</span>(srlIn =&gt; mmPreOut, srlOut =&gt; mm_muxC);
+    	U02: shiftL <span class="hljs-keyword">port</span> <span class="hljs-keyword">map</span>(sllIn =&gt; mmPreOut, sllOut =&gt; mm_muxD);
+    	U03: mux_4_1 <span class="hljs-keyword">port</span> <span class="hljs-keyword">map</span>(  A =&gt; mm_muxA ,
+                            	B =&gt; mm_muxB ,
+                            	C =&gt; mm_muxC ,
+                            	D =&gt; mm_muxD ,
+                            	s =&gt; mmSelect,
+                            	F =&gt; mm_registerIn );
+    	U04: regis <span class="hljs-keyword">port</span> <span class="hljs-keyword">map</span>(    registerENA =&gt; mmENA,
+                            	registerRST =&gt; mmRST,
+                            	registerCLK =&gt; mmCLK,
+                            	registerIn =&gt; mm_registerIn,
+                            	registerOut =&gt; mmPreOut);
+
+    mmOut &lt;= mmPreOut;
+<span class="hljs-keyword">end</span> Structural;</code></pre></div>
+<h2 id="shiftlvhd">shiftL.vhd</h2>
+<div class="joplin-editable"><pre class="joplin-source" data-joplin-language="vhdl" data-joplin-source-open="```vhdl&#10;" data-joplin-source-close="&#10;```">library IEEE;
+use IEEE.Std_Logic_1164.all;
+
+entity shiftL is
+  port (
+    sllIn: in std_logic_vector (15 downto 0);
+    sllOut: out std_logic_vector (15 downto 0)
+    );
+  end shiftL;
+
+architecture behavior of shiftL is
+
+  signal auxSignal: std_logic_vector(14 downto 0);
+
+  begin
+    auxSignal &lt;= sllIn(14 downto 0);
+    sllOut &lt;= auxSignal &amp; '0';
+end behavior;
+</pre><pre class="hljs"><code><span class="hljs-keyword">library</span> IEEE;
+<span class="hljs-keyword">use</span> IEEE.Std_Logic_1164.<span class="hljs-keyword">all</span>;
+
+<span class="hljs-keyword">entity</span> shiftL <span class="hljs-keyword">is</span>
+  <span class="hljs-keyword">port</span> (
+    sllIn: <span class="hljs-keyword">in</span> <span class="hljs-built_in">std_logic_vector</span> (<span class="hljs-number">15</span> <span class="hljs-keyword">downto</span> <span class="hljs-number">0</span>);
+    sllOut: <span class="hljs-keyword">out</span> <span class="hljs-built_in">std_logic_vector</span> (<span class="hljs-number">15</span> <span class="hljs-keyword">downto</span> <span class="hljs-number">0</span>)
+    );
+  <span class="hljs-keyword">end</span> shiftL;
+
+<span class="hljs-keyword">architecture</span> behavior <span class="hljs-keyword">of</span> shiftL <span class="hljs-keyword">is</span>
+
+  <span class="hljs-keyword">signal</span> auxSignal: <span class="hljs-built_in">std_logic_vector</span>(<span class="hljs-number">14</span> <span class="hljs-keyword">downto</span> <span class="hljs-number">0</span>);
+
+  <span class="hljs-keyword">begin</span>
+    auxSignal &lt;= sllIn(<span class="hljs-number">14</span> <span class="hljs-keyword">downto</span> <span class="hljs-number">0</span>);
+    sllOut &lt;= auxSignal &amp; <span class="hljs-string">&#x27;0&#x27;</span>;
+<span class="hljs-keyword">end</span> behavior;
+</code></pre></div>
+<h2 id="shiftr">shiftR</h2>
+<div class="joplin-editable"><pre class="joplin-source" data-joplin-language="vhdl" data-joplin-source-open="```vhdl&#10;" data-joplin-source-close="&#10;```">library IEEE;
+use IEEE.Std_Logic_1164.all;
+
+entity shiftR is
+  port (
+    srlIn: in std_logic_vector (15 downto 0);
+    srlOut: out std_logic_vector (15 downto 0)
+    );
+  end shiftR;
+
+architecture behavior of shiftR is
+
+  signal auxSignal: std_logic_vector(14 downto 0);
+
+  begin
+    auxSignal &lt;= srlIn(15 downto 1);
+    srlOut &lt;= '0' &amp; auxSignal;
+end behavior;
+</pre><pre class="hljs"><code><span class="hljs-keyword">library</span> IEEE;
+<span class="hljs-keyword">use</span> IEEE.Std_Logic_1164.<span class="hljs-keyword">all</span>;
+
+<span class="hljs-keyword">entity</span> shiftR <span class="hljs-keyword">is</span>
+  <span class="hljs-keyword">port</span> (
+    srlIn: <span class="hljs-keyword">in</span> <span class="hljs-built_in">std_logic_vector</span> (<span class="hljs-number">15</span> <span class="hljs-keyword">downto</span> <span class="hljs-number">0</span>);
+    srlOut: <span class="hljs-keyword">out</span> <span class="hljs-built_in">std_logic_vector</span> (<span class="hljs-number">15</span> <span class="hljs-keyword">downto</span> <span class="hljs-number">0</span>)
+    );
+  <span class="hljs-keyword">end</span> shiftR;
+
+<span class="hljs-keyword">architecture</span> behavior <span class="hljs-keyword">of</span> shiftR <span class="hljs-keyword">is</span>
+
+  <span class="hljs-keyword">signal</span> auxSignal: <span class="hljs-built_in">std_logic_vector</span>(<span class="hljs-number">14</span> <span class="hljs-keyword">downto</span> <span class="hljs-number">0</span>);
+
+  <span class="hljs-keyword">begin</span>
+    auxSignal &lt;= srlIn(<span class="hljs-number">15</span> <span class="hljs-keyword">downto</span> <span class="hljs-number">1</span>);
+    srlOut &lt;= <span class="hljs-string">&#x27;0&#x27;</span> &amp; auxSignal;
+<span class="hljs-keyword">end</span> behavior;
+</code></pre></div>
+<h2 id="mux_4_1vhd">mux_4_1.vhd</h2>
+<div class="joplin-editable"><pre class="joplin-source" data-joplin-language="vhdl" data-joplin-source-open="```vhdl&#10;" data-joplin-source-close="&#10;```">-- Multiplexador 4.1
+
+library IEEE;
+use IEEE.Std_Logic_1164.all;
+
+entity mux_4_1 is
+  port (A: in std_logic_vector (15 downto 0);
+    	B: in std_logic_vector (15 downto 0);
+    	C: in std_logic_vector (15 downto 0);
+    	D: in std_logic_vector (15 downto 0);
+    	s: in std_logic_vector(1 downto 0);
+    	F: out std_logic_vector (15 downto 0)
+    	);
+  end mux_4_1;
+
+ -- ARQUITETURA ESTRUTURAL
+architecture mux_estr of mux_4_1 is
+
+  begin
+    F &lt;=  A when s = &quot;00&quot; else
+          B when s = &quot;01&quot; else
+          C when s = &quot;10&quot; else
+          D;
+end mux_estr;
+</pre><pre class="hljs"><code><span class="hljs-comment">-- Multiplexador 4.1</span>
+
+<span class="hljs-keyword">library</span> IEEE;
+<span class="hljs-keyword">use</span> IEEE.Std_Logic_1164.<span class="hljs-keyword">all</span>;
+
+<span class="hljs-keyword">entity</span> mux_4_1 <span class="hljs-keyword">is</span>
+  <span class="hljs-keyword">port</span> (A: <span class="hljs-keyword">in</span> <span class="hljs-built_in">std_logic_vector</span> (<span class="hljs-number">15</span> <span class="hljs-keyword">downto</span> <span class="hljs-number">0</span>);
+    	B: <span class="hljs-keyword">in</span> <span class="hljs-built_in">std_logic_vector</span> (<span class="hljs-number">15</span> <span class="hljs-keyword">downto</span> <span class="hljs-number">0</span>);
+    	C: <span class="hljs-keyword">in</span> <span class="hljs-built_in">std_logic_vector</span> (<span class="hljs-number">15</span> <span class="hljs-keyword">downto</span> <span class="hljs-number">0</span>);
+    	D: <span class="hljs-keyword">in</span> <span class="hljs-built_in">std_logic_vector</span> (<span class="hljs-number">15</span> <span class="hljs-keyword">downto</span> <span class="hljs-number">0</span>);
+    	s: <span class="hljs-keyword">in</span> <span class="hljs-built_in">std_logic_vector</span>(<span class="hljs-number">1</span> <span class="hljs-keyword">downto</span> <span class="hljs-number">0</span>);
+    	F: <span class="hljs-keyword">out</span> <span class="hljs-built_in">std_logic_vector</span> (<span class="hljs-number">15</span> <span class="hljs-keyword">downto</span> <span class="hljs-number">0</span>)
+    	);
+  <span class="hljs-keyword">end</span> mux_4_1;
+
+ <span class="hljs-comment">-- ARQUITETURA ESTRUTURAL</span>
+<span class="hljs-keyword">architecture</span> mux_estr <span class="hljs-keyword">of</span> mux_4_1 <span class="hljs-keyword">is</span>
+
+  <span class="hljs-keyword">begin</span>
+    F &lt;=  A <span class="hljs-keyword">when</span> s = <span class="hljs-string">&quot;00&quot;</span> <span class="hljs-keyword">else</span>
+          B <span class="hljs-keyword">when</span> s = <span class="hljs-string">&quot;01&quot;</span> <span class="hljs-keyword">else</span>
+          C <span class="hljs-keyword">when</span> s = <span class="hljs-string">&quot;10&quot;</span> <span class="hljs-keyword">else</span>
+          D;
+<span class="hljs-keyword">end</span> mux_estr;
+</code></pre></div>
+<h2 id="regisvhd">regis.vhd</h2>
+<div class="joplin-editable"><pre class="joplin-source" data-joplin-language="vhdl" data-joplin-source-open="```vhdl&#10;" data-joplin-source-close="&#10;```">-- register for a 16 bits signals
+
+library IEEE;
+use IEEE.Std_Logic_1164.all;
+
+entity regis is
+  port (
+    registerENA: in std_logic;
+    registerRST: in std_logic;
+    registerCLK: in std_logic;
+    registerIn: in std_logic_vector (15 downto 0);
+    registerOut: out std_logic_vector (15 downto 0)
+    );
+  end regis;
+
+architecture behavior of regis is
+
+  begin
+    process
+      begin
+      wait until registerCLK'event and registerCLK = '1';
+
+      if registerRST = '1' then
+        registerOut &lt;= &quot;0000000000000000&quot;;
+      elsif registerENA = '1' then
+        registerOut &lt;= registerIn;
+      end if;
+    end process;
+end behavior;
+</pre><pre class="hljs"><code><span class="hljs-comment">-- register for a 16 bits signals</span>
+
+<span class="hljs-keyword">library</span> IEEE;
+<span class="hljs-keyword">use</span> IEEE.Std_Logic_1164.<span class="hljs-keyword">all</span>;
+
+<span class="hljs-keyword">entity</span> regis <span class="hljs-keyword">is</span>
+  <span class="hljs-keyword">port</span> (
+    registerENA: <span class="hljs-keyword">in</span> <span class="hljs-built_in">std_logic</span>;
+    registerRST: <span class="hljs-keyword">in</span> <span class="hljs-built_in">std_logic</span>;
+    registerCLK: <span class="hljs-keyword">in</span> <span class="hljs-built_in">std_logic</span>;
+    registerIn: <span class="hljs-keyword">in</span> <span class="hljs-built_in">std_logic_vector</span> (<span class="hljs-number">15</span> <span class="hljs-keyword">downto</span> <span class="hljs-number">0</span>);
+    registerOut: <span class="hljs-keyword">out</span> <span class="hljs-built_in">std_logic_vector</span> (<span class="hljs-number">15</span> <span class="hljs-keyword">downto</span> <span class="hljs-number">0</span>)
+    );
+  <span class="hljs-keyword">end</span> regis;
+
+<span class="hljs-keyword">architecture</span> behavior <span class="hljs-keyword">of</span> regis <span class="hljs-keyword">is</span>
+
+  <span class="hljs-keyword">begin</span>
+    <span class="hljs-keyword">process</span>
+      <span class="hljs-keyword">begin</span>
+      <span class="hljs-keyword">wait</span> <span class="hljs-keyword">until</span> registerCLK<span class="hljs-symbol">&#x27;event</span> <span class="hljs-keyword">and</span> registerCLK = <span class="hljs-string">&#x27;1&#x27;</span>;
+
+      <span class="hljs-keyword">if</span> registerRST = <span class="hljs-string">&#x27;1&#x27;</span> <span class="hljs-keyword">then</span>
+        registerOut &lt;= <span class="hljs-string">&quot;0000000000000000&quot;</span>;
+      <span class="hljs-keyword">elsif</span> registerENA = <span class="hljs-string">&#x27;1&#x27;</span> <span class="hljs-keyword">then</span>
+        registerOut &lt;= registerIn;
+      <span class="hljs-keyword">end</span> <span class="hljs-keyword">if</span>;
+    <span class="hljs-keyword">end</span> <span class="hljs-keyword">process</span>;
+<span class="hljs-keyword">end</span> behavior;
+</code></pre></div>
+<h2 id="adder_16vhd">adder_16.vhd</h2>
+<div class="joplin-editable"><pre class="joplin-source" data-joplin-language="vhdl" data-joplin-source-open="```vhdl&#10;" data-joplin-source-close="&#10;```">library IEEE;
+use IEEE.STD_LOGIC_1164.all;
+
+entity adder_16 is
+    port(
+    operand_a, operand_b: in std_logic_vector(15 downto 0);
+    result: out std_logic_vector(15 downto 0)
+     );
+end adder_16;
+
+architecture Structural of adder_16 is
+
+    signal overflow : std_logic;
+  signal aux: std_logic_vector(14 downto 0);
+
+  component full_adder is
+    port(
+      A: in std_logic;
+      B: in std_logic;
+      Cin: in std_logic;
+      S: out std_logic;
+      Cout: out std_logic
+    );
+  end component;
+
+  component half_adder is
+    port(
+      A: in std_logic;
+      B: in std_logic;
+      S: out std_logic;
+      Cout: out std_logic
+     );
+   end component;
+     
+  begin
+        U00: half_adder port map(A =&gt; operand_a(0), B=&gt; operand_b(0), S=&gt; result(0), Cout=&gt; aux(0));
+    	U01: full_adder port map(A =&gt; operand_a(1), B=&gt; operand_b(1), Cin=&gt; aux(0), S=&gt; result(1), Cout=&gt; aux(1));
+    	U02: full_adder port map(A =&gt; operand_a(2), B=&gt; operand_b(2), Cin=&gt; aux(1), S=&gt; result(2), Cout=&gt; aux(2));
+    	U03: full_adder port map(A =&gt; operand_a(3), B=&gt; operand_b(3), Cin=&gt; aux(2), S=&gt; result(3), Cout=&gt; aux(3));
+    	U04: full_adder port map(A =&gt; operand_a(4), B=&gt; operand_b(4), Cin=&gt; aux(3), S=&gt; result(4), Cout=&gt; aux(4));
+        U05: full_adder port map(A =&gt; operand_a(5), B=&gt; operand_b(5), Cin=&gt; aux(4), S=&gt; result(5), Cout=&gt; aux(5));
+    	U06: full_adder port map(A =&gt; operand_a(6), B=&gt; operand_b(6), Cin=&gt; aux(5), S=&gt; result(6), Cout=&gt; aux(6));
+    	U07: full_adder port map(A =&gt; operand_a(7), B=&gt; operand_b(7), Cin=&gt; aux(6), S=&gt; result(7), Cout=&gt; aux(7));
+    	U08: full_adder port map(A =&gt; operand_a(8), B=&gt; operand_b(8), Cin=&gt; aux(7), S=&gt; result(8), Cout=&gt; aux(8));
+        U09: full_adder port map(A =&gt; operand_a(9), B=&gt; operand_b(9), Cin=&gt; aux(8), S=&gt; result(9), Cout=&gt; aux(9));
+    	U10: full_adder port map(A =&gt; operand_a(10), B=&gt; operand_b(10), Cin=&gt; aux(9), S=&gt; result(10), Cout=&gt; aux(10));
+    	U11: full_adder port map(A =&gt; operand_a(11), B=&gt; operand_b(11), Cin=&gt; aux(10), S=&gt; result(11), Cout=&gt; aux(11));
+    	U12: full_adder port map(A =&gt; operand_a(12), B=&gt; operand_b(12), Cin=&gt; aux(11), S=&gt; result(12), Cout=&gt; aux(12));
+        U13: full_adder port map(A =&gt; operand_a(13), B=&gt; operand_b(13), Cin=&gt; aux(12), S=&gt; result(13), Cout=&gt; aux(13));
+    	U14: full_adder port map(A =&gt; operand_a(14), B=&gt; operand_b(14), Cin=&gt; aux(13), S=&gt; result(14), Cout=&gt; aux(14));
+    	U15: full_adder port map(A =&gt; operand_a(15), B=&gt; operand_b(15), Cin=&gt; aux(14), S=&gt; result(15), Cout=&gt; overflow);
+end Structural;
+</pre><pre class="hljs"><code><span class="hljs-keyword">library</span> IEEE;
+<span class="hljs-keyword">use</span> IEEE.STD_LOGIC_1164.<span class="hljs-keyword">all</span>;
+
+<span class="hljs-keyword">entity</span> adder_16 <span class="hljs-keyword">is</span>
+    <span class="hljs-keyword">port</span>(
+    operand_a, operand_b: <span class="hljs-keyword">in</span> <span class="hljs-built_in">std_logic_vector</span>(<span class="hljs-number">15</span> <span class="hljs-keyword">downto</span> <span class="hljs-number">0</span>);
+    result: <span class="hljs-keyword">out</span> <span class="hljs-built_in">std_logic_vector</span>(<span class="hljs-number">15</span> <span class="hljs-keyword">downto</span> <span class="hljs-number">0</span>)
+     );
+<span class="hljs-keyword">end</span> adder_16;
+
+<span class="hljs-keyword">architecture</span> Structural <span class="hljs-keyword">of</span> adder_16 <span class="hljs-keyword">is</span>
+
+    <span class="hljs-keyword">signal</span> overflow : <span class="hljs-built_in">std_logic</span>;
+  <span class="hljs-keyword">signal</span> aux: <span class="hljs-built_in">std_logic_vector</span>(<span class="hljs-number">14</span> <span class="hljs-keyword">downto</span> <span class="hljs-number">0</span>);
+
+  <span class="hljs-keyword">component</span> full_adder <span class="hljs-keyword">is</span>
+    <span class="hljs-keyword">port</span>(
+      A: <span class="hljs-keyword">in</span> <span class="hljs-built_in">std_logic</span>;
+      B: <span class="hljs-keyword">in</span> <span class="hljs-built_in">std_logic</span>;
+      Cin: <span class="hljs-keyword">in</span> <span class="hljs-built_in">std_logic</span>;
+      S: <span class="hljs-keyword">out</span> <span class="hljs-built_in">std_logic</span>;
+      Cout: <span class="hljs-keyword">out</span> <span class="hljs-built_in">std_logic</span>
+    );
+  <span class="hljs-keyword">end</span> <span class="hljs-keyword">component</span>;
+
+  <span class="hljs-keyword">component</span> half_adder <span class="hljs-keyword">is</span>
+    <span class="hljs-keyword">port</span>(
+      A: <span class="hljs-keyword">in</span> <span class="hljs-built_in">std_logic</span>;
+      B: <span class="hljs-keyword">in</span> <span class="hljs-built_in">std_logic</span>;
+      S: <span class="hljs-keyword">out</span> <span class="hljs-built_in">std_logic</span>;
+      Cout: <span class="hljs-keyword">out</span> <span class="hljs-built_in">std_logic</span>
+     );
+   <span class="hljs-keyword">end</span> <span class="hljs-keyword">component</span>;
+     
+  <span class="hljs-keyword">begin</span>
+        U00: half_adder <span class="hljs-keyword">port</span> <span class="hljs-keyword">map</span>(A =&gt; operand_a(<span class="hljs-number">0</span>), B=&gt; operand_b(<span class="hljs-number">0</span>), S=&gt; result(<span class="hljs-number">0</span>), Cout=&gt; aux(<span class="hljs-number">0</span>));
+    	U01: full_adder <span class="hljs-keyword">port</span> <span class="hljs-keyword">map</span>(A =&gt; operand_a(<span class="hljs-number">1</span>), B=&gt; operand_b(<span class="hljs-number">1</span>), Cin=&gt; aux(<span class="hljs-number">0</span>), S=&gt; result(<span class="hljs-number">1</span>), Cout=&gt; aux(<span class="hljs-number">1</span>));
+    	U02: full_adder <span class="hljs-keyword">port</span> <span class="hljs-keyword">map</span>(A =&gt; operand_a(<span class="hljs-number">2</span>), B=&gt; operand_b(<span class="hljs-number">2</span>), Cin=&gt; aux(<span class="hljs-number">1</span>), S=&gt; result(<span class="hljs-number">2</span>), Cout=&gt; aux(<span class="hljs-number">2</span>));
+    	U03: full_adder <span class="hljs-keyword">port</span> <span class="hljs-keyword">map</span>(A =&gt; operand_a(<span class="hljs-number">3</span>), B=&gt; operand_b(<span class="hljs-number">3</span>), Cin=&gt; aux(<span class="hljs-number">2</span>), S=&gt; result(<span class="hljs-number">3</span>), Cout=&gt; aux(<span class="hljs-number">3</span>));
+    	U04: full_adder <span class="hljs-keyword">port</span> <span class="hljs-keyword">map</span>(A =&gt; operand_a(<span class="hljs-number">4</span>), B=&gt; operand_b(<span class="hljs-number">4</span>), Cin=&gt; aux(<span class="hljs-number">3</span>), S=&gt; result(<span class="hljs-number">4</span>), Cout=&gt; aux(<span class="hljs-number">4</span>));
+        U05: full_adder <span class="hljs-keyword">port</span> <span class="hljs-keyword">map</span>(A =&gt; operand_a(<span class="hljs-number">5</span>), B=&gt; operand_b(<span class="hljs-number">5</span>), Cin=&gt; aux(<span class="hljs-number">4</span>), S=&gt; result(<span class="hljs-number">5</span>), Cout=&gt; aux(<span class="hljs-number">5</span>));
+    	U06: full_adder <span class="hljs-keyword">port</span> <span class="hljs-keyword">map</span>(A =&gt; operand_a(<span class="hljs-number">6</span>), B=&gt; operand_b(<span class="hljs-number">6</span>), Cin=&gt; aux(<span class="hljs-number">5</span>), S=&gt; result(<span class="hljs-number">6</span>), Cout=&gt; aux(<span class="hljs-number">6</span>));
+    	U07: full_adder <span class="hljs-keyword">port</span> <span class="hljs-keyword">map</span>(A =&gt; operand_a(<span class="hljs-number">7</span>), B=&gt; operand_b(<span class="hljs-number">7</span>), Cin=&gt; aux(<span class="hljs-number">6</span>), S=&gt; result(<span class="hljs-number">7</span>), Cout=&gt; aux(<span class="hljs-number">7</span>));
+    	U08: full_adder <span class="hljs-keyword">port</span> <span class="hljs-keyword">map</span>(A =&gt; operand_a(<span class="hljs-number">8</span>), B=&gt; operand_b(<span class="hljs-number">8</span>), Cin=&gt; aux(<span class="hljs-number">7</span>), S=&gt; result(<span class="hljs-number">8</span>), Cout=&gt; aux(<span class="hljs-number">8</span>));
+        U09: full_adder <span class="hljs-keyword">port</span> <span class="hljs-keyword">map</span>(A =&gt; operand_a(<span class="hljs-number">9</span>), B=&gt; operand_b(<span class="hljs-number">9</span>), Cin=&gt; aux(<span class="hljs-number">8</span>), S=&gt; result(<span class="hljs-number">9</span>), Cout=&gt; aux(<span class="hljs-number">9</span>));
+    	U10: full_adder <span class="hljs-keyword">port</span> <span class="hljs-keyword">map</span>(A =&gt; operand_a(<span class="hljs-number">10</span>), B=&gt; operand_b(<span class="hljs-number">10</span>), Cin=&gt; aux(<span class="hljs-number">9</span>), S=&gt; result(<span class="hljs-number">10</span>), Cout=&gt; aux(<span class="hljs-number">10</span>));
+    	U11: full_adder <span class="hljs-keyword">port</span> <span class="hljs-keyword">map</span>(A =&gt; operand_a(<span class="hljs-number">11</span>), B=&gt; operand_b(<span class="hljs-number">11</span>), Cin=&gt; aux(<span class="hljs-number">10</span>), S=&gt; result(<span class="hljs-number">11</span>), Cout=&gt; aux(<span class="hljs-number">11</span>));
+    	U12: full_adder <span class="hljs-keyword">port</span> <span class="hljs-keyword">map</span>(A =&gt; operand_a(<span class="hljs-number">12</span>), B=&gt; operand_b(<span class="hljs-number">12</span>), Cin=&gt; aux(<span class="hljs-number">11</span>), S=&gt; result(<span class="hljs-number">12</span>), Cout=&gt; aux(<span class="hljs-number">12</span>));
+        U13: full_adder <span class="hljs-keyword">port</span> <span class="hljs-keyword">map</span>(A =&gt; operand_a(<span class="hljs-number">13</span>), B=&gt; operand_b(<span class="hljs-number">13</span>), Cin=&gt; aux(<span class="hljs-number">12</span>), S=&gt; result(<span class="hljs-number">13</span>), Cout=&gt; aux(<span class="hljs-number">13</span>));
+    	U14: full_adder <span class="hljs-keyword">port</span> <span class="hljs-keyword">map</span>(A =&gt; operand_a(<span class="hljs-number">14</span>), B=&gt; operand_b(<span class="hljs-number">14</span>), Cin=&gt; aux(<span class="hljs-number">13</span>), S=&gt; result(<span class="hljs-number">14</span>), Cout=&gt; aux(<span class="hljs-number">14</span>));
+    	U15: full_adder <span class="hljs-keyword">port</span> <span class="hljs-keyword">map</span>(A =&gt; operand_a(<span class="hljs-number">15</span>), B=&gt; operand_b(<span class="hljs-number">15</span>), Cin=&gt; aux(<span class="hljs-number">14</span>), S=&gt; result(<span class="hljs-number">15</span>), Cout=&gt; overflow);
+<span class="hljs-keyword">end</span> Structural;
+</code></pre></div>
+</div></div>
+					</body>
+				</html>
+			
