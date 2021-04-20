@@ -1,5 +1,3 @@
--- register for a 16 bits signals
-
 library IEEE;
 use IEEE.Std_Logic_1164.all;
 
