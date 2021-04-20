@@ -62,7 +62,7 @@ architecture Structural of multi_modo is
     mm_muxB <= mmIn;
 
 		U00: adder_16 port map( operand_a => mmIn ,
-                            operand_b => mmOut ,
+                            operand_b => mmPreOut ,
                             result => mm_muxA
     );
     U01: srl port map(srlIn => mmPreOut, srlOut => mm_muxC);
